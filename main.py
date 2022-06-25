@@ -1,17 +1,16 @@
-import pygame
+import pygame # pip install pygame (recogment python version 3.10.5)
 import random
 import tkinter as tk
 from tkinter import messagebox
 
-rows2 = int(input('Enter number of rows: '))
+rows2 = int(input('Enter number of rows: ')) # this will be the size of the grid its rows*rows for the x and y ( for best experience set to 20 )
 
-screenX, screenY = 800, 600
+screenX, screenY = 800, 600 # screen size can only be this. 1080p or any other sizes will keep the same screen size
 screen = pygame.display.set_mode((screenX, screenY))
-# make the original version of snake using cubes
 class Cube(object):
     global rows2
-    rows = rows2
-    w = 500
+    rows = rows2 # set the row size
+    w = 500 # width can stay the same but you could experience with some other sizes
 
     def __init__(self, start, dirnx=1, dirny=0, color=(255, 0, 0)):
         self.pos = start
@@ -19,12 +18,12 @@ class Cube(object):
         self.dirny = 0
         self.color = color
 
-    def move(self, dirnx, dirny):
+    def move(self, dirnx, dirny): # move the players snake
         self.dirnx = dirnx
         self.dirny = dirny
         self.pos = (self.pos[0] + self.dirnx, self.pos[1] + self.dirny)
 
-    def draw(self, surface, eyes=False):
+    def draw(self, surface, eyes=False): # draw the player ( recogment setting eyes to False if you use a smaller size than recogmended )
         dis = self.w // self.rows
         i = self.pos[0]
         j = self.pos[1]
@@ -39,7 +38,7 @@ class Cube(object):
             pygame.draw.circle(surface, (0, 0, 0), circleMiddle2, radius)
 
 
-class Snake(object):
+class Snake(object): # all the player components
     body = []
     turns = {}
 
@@ -50,7 +49,7 @@ class Snake(object):
         self.dirnx = 0
         self.dirny = 1
 
-    def move(self):
+    def move(self): # get the controlls and move later ( snake goes to fast if moved inside component )
         keys = pygame.key.get_pressed()
 
         for key in keys:
@@ -106,7 +105,7 @@ class Snake(object):
                 c.draw(surface)
 
 
-def drawGrid(w, rows, surface):
+def drawGrid(w, rows, surface): # draw grid (w = 5 for invisible grid, usefull for smaller or bigger snake size)
     sizeBtwn = w // rows
 
     x = 0
@@ -119,7 +118,7 @@ def drawGrid(w, rows, surface):
         pygame.draw.line(surface, (255, 255, 255), (0, y), (w, y))
 
 
-def redrawWindow(surface):
+def redrawWindow(surface): # update screen
     global rows, width, s, snack
     surface.fill((0, 0, 0))
     s.draw(surface)
@@ -128,7 +127,7 @@ def redrawWindow(surface):
     pygame.display.update()
 
 
-def randomSnack(rows, item):
+def randomSnack(rows, item): # move the snack
     positions = item.body
 
     while True:
@@ -142,7 +141,7 @@ def randomSnack(rows, item):
     return (x, y)
 
 
-def message_box(subject, content):
+def message_box(subject, content): # used to draw the lose message
     root = tk.Tk()
     root.attributes("-topmost", True)
     root.withdraw()
@@ -154,9 +153,9 @@ def message_box(subject, content):
 
 
 def main():
-    global width, rows, s, snack
-    width = 500
-    rows = 20
+    global width, rows2, s, snack
+    width = 500 # change this for bigger screen
+    rows = rows2
     win = pygame.display.set_mode((width, width))
     s = Snake((255, 0, 0), (10, 10))
     snack = Cube(randomSnack(rows, s), color=(0, 255, 0))
@@ -170,7 +169,7 @@ def main():
         frame += 1
         s.move()
 
-        if frame % 8 == 0:
+        if frame % 8 == 0: # move the player here
             for i, c in enumerate(s.body):
                 p = c.pos[:]
                 if p in s.turns:
@@ -205,7 +204,7 @@ def main():
                 s.reset((10, 10))
                 break
 
-        redrawWindow(win)
+        redrawWindow(win) # redraw
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 flag = False
