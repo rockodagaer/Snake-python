@@ -11,3 +11,8 @@ But this is a really rare bug and will never happend, the one listed above is mu
 It will sometimes miss button presses if there are more than one buttons pressed inside one frame.
 This is a problem for quick-time button presses because it will only use the last pressed button
 This is also what causes a bug that kills you when you move to the other side really fast
+
+
+
+Tip: theres a glitch that if you use a grid size higher than 20 the eyes can look bad
+To fix this you can go to the cubes class and go to draw and set eyes to false when you draw it
