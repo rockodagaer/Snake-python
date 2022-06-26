@@ -8,7 +8,7 @@ Its made using the closed beta version of openAI Codex and the full released ver
 - openAI Codex
 - openAI GPT-3-DAVINCI-2 --- code generation / idea generation
 - openAI GPT-3-Codex --- code generation
-- openAI GPT-3-Codex-EDIT --- code fixing
+- openAI GPT-3-Codex-EDIT --- bug fixing / adding features
 - openAI GPT-3-INSERT --- code adding
 - Visual Studio Code --- coding
 
