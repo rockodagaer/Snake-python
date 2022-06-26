@@ -6,8 +6,8 @@ from tkinter import messagebox
 rows2 = int(input('Enter number of rows: ')) # this will be the size of the grid its rows*rows for the x and y ( for best experience set to 20 )
 
 screenX, screenY = 800, 600 # screen size can only be this. 1080p or any other sizes will keep the same screen size
-screen = pygame.display.set_mode((screenX, screenY))
-class Cube(object):
+screen = pygame.display.set_mode((screenX, screenY)) # makes the screen will be set to W*W for default.
+class Cube(object): # the function that does the drawing
     global rows2
     rows = rows2 # set the row size
     w = 500 # width can stay the same but you could experience with some other sizes
@@ -29,7 +29,7 @@ class Cube(object):
         j = self.pos[1]
 
         pygame.draw.rect(surface, self.color, (i * dis + 1, j * dis + 1, dis - 2, dis - 2))
-        if eyes:
+        if eyes: # recogment setting to false if grid size other than 20
             centre = dis // 2
             radius = 3
             circleMiddle = (i * dis + centre - radius, j * dis + 8)
@@ -44,19 +44,19 @@ class Snake(object): # all the player components
 
     def __init__(self, color, pos):
         self.color = color
-        self.head = Cube(pos)
-        self.body.append(self.head)
-        self.dirnx = 0
-        self.dirny = 1
+        self.head = Cube(pos) # this will be where the player head is located
+        self.body.append(self.head) # all the positions of the cubes are located in here (incl head)
+        self.dirnx = 0 # head direction X
+        self.dirny = 1 # head direction Y
 
     def move(self): # get the controlls and move later ( snake goes to fast if moved inside component )
-        keys = pygame.key.get_pressed()
+        keys = pygame.key.get_pressed() # get key pressed
 
         for key in keys:
             if keys[pygame.K_LEFT]:
-                if not self.dirnx == 1: self.dirnx = -1
+                if not self.dirnx == 1: self.dirnx = -1 # it checks if its not going in the reverse direction because you will die without reason without
                 self.dirny = 0
-                self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
+                self.turns[self.head.pos[:]] = [self.dirnx, self.dirny] # turn
 
             elif keys[pygame.K_RIGHT]:
                 if not self.dirnx == -1: self.dirnx = 1
@@ -73,7 +73,7 @@ class Snake(object): # all the player components
                 if not self.dirny == -1: self.dirny = 1
                 self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
 
-    def reset(self, pos):
+    def reset(self, pos): # used if you die
         self.head = Cube(pos)
         self.body = []
         self.body.append(self.head)
@@ -81,7 +81,7 @@ class Snake(object): # all the player components
         self.dirnx = 0
         self.dirny = 1
 
-    def addCube(self):
+    def addCube(self): # used if you eat a fruit
         tail = self.body[-1]
         dx, dy = tail.dirnx, tail.dirny
 
@@ -97,7 +97,7 @@ class Snake(object): # all the player components
         self.body[-1].dirnx = dx
         self.body[-1].dirny = dy
 
-    def draw(self, surface):
+    def draw(self, surface): # draw the snake
         for i, c in enumerate(self.body):
             if i == 0:
                 c.draw(surface, True)
@@ -152,7 +152,7 @@ def message_box(subject, content): # used to draw the lose message
         pass
 
 
-def main():
+def main(): # main game
     global width, rows2, s, snack
     width = 500 # change this for bigger screen
     rows = rows2
@@ -165,11 +165,11 @@ def main():
 
     frame = 0
 
-    while flag:
+    while flag: # main loop
         frame += 1
         s.move()
 
-        if frame % 8 == 0: # move the player here
+        if frame % 8 == 0: # move the player
             for i, c in enumerate(s.body):
                 p = c.pos[:]
                 if p in s.turns:
@@ -189,7 +189,7 @@ def main():
                     else:
                         c.move(c.dirnx, c.dirny)
         clock.tick(60)
-        if s.body[0].pos == snack.pos:
+        if s.body[0].pos == snack.pos: # check if touching fruit
             s.addCube()
             snack = Cube(randomSnack(rows, s), color=(0, 255, 0))
             if s.body[0].pos[0] < 0 or s.body[0].pos[0] > rows - 1 or s.body[0].pos[1] < 0 or s.body[0].pos[1] > rows - 1:
@@ -197,7 +197,7 @@ def main():
                 message_box('You Lost!', 'Play again...')
                 s.reset((10, 10))
 
-        for x in range(len(s.body)):
+        for x in range(len(s.body)): # check if touching body
             if s.body[x].pos in list(map(lambda z: z.pos, s.body[x + 1:])):
                 print('Score: ', len(s.body))
                 message_box('You Lost!', 'Play again...')
@@ -205,10 +205,10 @@ def main():
                 break
 
         redrawWindow(win) # redraw
-        for event in pygame.event.get():
+        for event in pygame.event.get(): # get the quit command
             if event.type == pygame.QUIT:
-                flag = False
+                flag = False # quit the main loop
                 pygame.quit()
 
 
-main()
+main() # run the game
